@@ -9,6 +9,11 @@ This project is a Twitch extension built with **React**, **TypeScript**, and **V
 - **Dark Mode Support**: Automatically adapts to the Twitch UI theme (light or dark).
 - **Responsive Design**: Built with Tailwind CSS for a clean and responsive UI.
 
+## Screenshots
+
+![Light Mode](./screenshots/LightMode.png)
+![Dark Mode](./screenshots/DarkMode.png)
+
 ## Tech Stack
 
 - **React**: Frontend library for building user interfaces.
