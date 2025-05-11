@@ -16,7 +16,7 @@ const PostMedia: React.FC<PostMediaProps> = ({ media }) => {
             { 
                 const gridCols = (media as AppBskyEmbedImages.View).images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'
                 return (
-                    <div className={"grid gap-2 " + gridCols}>
+                    <div className={"mt-2 grid gap-2 " + gridCols}>
                         {(media as AppBskyEmbedImages.View).images.map((image) => (
                             <img
                                 key={image.thumb}
@@ -38,7 +38,7 @@ const PostMedia: React.FC<PostMediaProps> = ({ media }) => {
                         controls={true}
                         width="100%"
                         height="auto"
-                        className="rounded-lg"
+                        className="mt-2 rounded-lg"
                     />
                 </Suspense>
             );
@@ -64,7 +64,7 @@ const PostMedia: React.FC<PostMediaProps> = ({ media }) => {
                 const record = media as AppBskyEmbedRecord.View;
                 if (isViewRecord(record.record)) {
                     return (
-                        <div className="mt-1.5 p-2 border rounded-lg">
+                        <div className="mt-2 p-2 border rounded-lg">
                             <EmbeddedPost post={record.record as AppBskyEmbedRecord.ViewRecord} />
                         </div>
                     );
@@ -78,7 +78,7 @@ const PostMedia: React.FC<PostMediaProps> = ({ media }) => {
                 return (
                     <div>
                         <PostMedia media={recordWithMedia.media} />
-                        <div className="mt-1.5 p-2 border rounded-lg">
+                        <div className="mt-2 p-2 border rounded-lg">
                             <EmbeddedPost post={embeddedRecord} />
                         </div>
                     </div>
