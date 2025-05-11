@@ -1,11 +1,14 @@
 import type { $Typed, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia, AppBskyEmbedVideo } from "@atproto/api";
-import ReactHlsPlayer from "react-hls-video-player";
+// import ReactHlsPlayer from "react-hls-video-player";
 import EmbeddedPost from "./EmbeddedPost";
 import { isViewRecord } from "@atproto/api/dist/client/types/app/bsky/embed/record";
+import { lazy, Suspense } from "react";
 
 interface PostMediaProps {
     media: $Typed<AppBskyEmbedImages.View | AppBskyEmbedExternal.View | AppBskyEmbedVideo.View | AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View | { $type: string }>;
 }
+
+const ReactHlsPlayer = lazy(() => import("react-hls-video-player"));
 
 const PostMedia: React.FC<PostMediaProps> = ({ media }) => {
     switch (media.$type) {
@@ -26,10 +29,10 @@ const PostMedia: React.FC<PostMediaProps> = ({ media }) => {
                     </div>
                 ); 
             }
-        case "app.bsky.embed.video#view":
-            {
-                const video = media as AppBskyEmbedVideo.View;
-                return (
+        case "app.bsky.embed.video#view": {
+            const video = media as AppBskyEmbedVideo.View;
+            return (
+                <Suspense fallback={<div>Loading video...</div>}>
                     <ReactHlsPlayer
                         src={video.playlist}
                         controls={true}
@@ -37,7 +40,8 @@ const PostMedia: React.FC<PostMediaProps> = ({ media }) => {
                         height="auto"
                         className="rounded-lg"
                     />
-                );
+                </Suspense>
+            );
             }
         // TODO This needs testing
         case "app.bsky.embed.external#view":
