@@ -2,6 +2,7 @@ import { SiBluesky } from '@icons-pack/react-simple-icons'
 import './App.css'
 import { useEffect, useRef, useState } from 'react'
 import type { blueskyConfig } from './types'
+import useThemeSwitcher from './hooks/useThemeSwitcher'
 
 function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -41,16 +42,7 @@ function Config() {
     });
     const submitBtn = useRef<HTMLInputElement | null>(null)
 
-    useEffect(() => {
-        // Listen for Twitch theme changes
-        window.Twitch.ext.onContext((context) => {
-          if (context.theme === 'dark') {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
-        });
-      }, []);
+    useThemeSwitcher()
 
     useEffect(() => {
         // Listen for configuration changes

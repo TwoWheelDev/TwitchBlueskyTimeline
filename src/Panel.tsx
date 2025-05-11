@@ -5,10 +5,13 @@ import { useEffect, useState } from 'react'
 import type { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs'
 import Post from './Post'
 import type { blueskyConfig } from './types'
+import useThemeSwitcher from './hooks/useThemeSwitcher'
 
 function Panel() {
   const [blueskyConfig, setBlueskyConfig] = useState<blueskyConfig>({blueskyHandle: '', numPosts: 5})
   const [posts, setPosts] = useState<FeedViewPost[]>([])
+
+  useThemeSwitcher()
  
   useEffect(() => {
     const session = new CredentialSession(new URL("https://public.api.bsky.app"))  
@@ -24,17 +27,6 @@ function Panel() {
       })
     }    
   }, [blueskyConfig])
-
-  useEffect(() => {
-    // Listen for Twitch theme changes
-    window.Twitch.ext.onContext((context) => {
-      if (context.theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    });
-  }, []);
 
   useEffect(() => {
     Twitch.ext.configuration.onChanged(() => {
