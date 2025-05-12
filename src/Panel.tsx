@@ -6,37 +6,36 @@ import type { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/
 import Post from './Post'
 import type { blueskyConfig } from './types'
 import useThemeSwitcher from './hooks/useThemeSwitcher'
-import 'overlayscrollbars/overlayscrollbars.css'
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react'
 import { RefreshCw } from 'lucide-react'
 import Loader from './Loader'
+import Scrollbar from 'react-scrollbars-custom'
 
 function getPosts(config: blueskyConfig, setPosts: (posts: FeedViewPost[]) => void, setIsLoading: (isLoading: boolean) => void) {
   setIsLoading(true)
-  const session = new CredentialSession(new URL("https://public.api.bsky.app"))  
+  const session = new CredentialSession(new URL("https://public.api.bsky.app"))
   const agent = new Agent(session)
   if (config.blueskyHandle != '') {
     agent.getAuthorFeed({
-    actor: config.blueskyHandle, 
-    limit: config.numPosts,
-    filter: 'posts_no_replies'
-  })
-    .then((res) => {
-      setPosts(res.data.feed)
-      setIsLoading(false)
+      actor: config.blueskyHandle,
+      limit: config.numPosts,
+      filter: 'posts_no_replies'
     })
-  }   
+      .then((res) => {
+        setPosts(res.data.feed)
+        setIsLoading(false)
+      })
+  }
 }
 
 function Panel() {
-  const [blueskyConfig, setBlueskyConfig] = useState<blueskyConfig>({blueskyHandle: '', numPosts: 5})
+  const [blueskyConfig, setBlueskyConfig] = useState<blueskyConfig>({ blueskyHandle: '', numPosts: 5 })
   const [posts, setPosts] = useState<FeedViewPost[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useThemeSwitcher()
- 
+
   useEffect(() => {
-    getPosts(blueskyConfig, setPosts, setIsLoading)  
+    getPosts(blueskyConfig, setPosts, setIsLoading)
   }, [blueskyConfig])
 
   useEffect(() => {
@@ -57,11 +56,13 @@ function Panel() {
         </div>
         <RefreshCw onClick={() => getPosts(blueskyConfig, setPosts, setIsLoading)} className='text-light-grey hover:cursor-pointer' />
       </header>
-      <OverlayScrollbarsComponent className='flex-1' defer>
-        <main className='h-full p-4 overflow-scroll'>
-          {isLoading ? <Loader /> : posts.map(post => <Post key={post.post.uri} post={post} />) }
-        </main>
-      </OverlayScrollbarsComponent>
+      {isLoading ? <Loader /> :
+        <Scrollbar width={"w-full"} height={"h-full"}  >
+          <main className='h-full p-4'>
+            {posts.map(post => <Post key={post.post.uri} post={post} />)}
+          </main>
+        </Scrollbar>
+      }
     </div>
   )
 }
